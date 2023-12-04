@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2023-12-04)
+
+
+### Features
+
+* Init ([b0ee650](https://github.com/soerenschneider/fetcharr/commit/b0ee65047e18fa6310f0217bd6950bf79c26067e))
+
 ## [1.4.0](https://github.com/soerenschneider/fetcharr/compare/v1.3.1...v1.4.0) (2023-12-04)
 
 
