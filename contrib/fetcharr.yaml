@@ -1,0 +1,36 @@
+events_impl:
+  - webhook_server
+  - ticker
+
+hooks:
+  - type: webhook
+    encoded_data: '{"subject":"Fetcharr success","message":"Transferred {{ .NumTransferredFiles }} files ({{ .TotalBytesReceivedHumanized }})","service_id":"telegram"}'
+    endpoint: https://hermes.domain.tld/notify
+    name: notify
+    stage: POST_SUCCESS_TRANSFER
+    verb: POST
+
+  - type: cmd
+    commands:
+      - echo "running before sync"
+    name: example-cmd
+    stage: PRE
+
+metrics_addr: 127.0.0.1:9222
+
+rsync:
+  bwlimit: 12m
+  exclude: '*.part'
+  host: remote.host.tld
+  local_dir: /srv/files/linux-isos
+  remote_dir: /var/lib/transmission/completed
+  remove_source_files: true
+
+syncer_impl: rsync
+
+ticker:
+  interval_s: 14000
+
+webhook_server:
+  address: :9999
+  path: /webhook
