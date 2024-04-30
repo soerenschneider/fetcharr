@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.1.0](https://github.com/soerenschneider/fetcharr/compare/v1.0.0...v1.1.0) (2024-04-30)
+
+
+### Features
+
+* add rabbitmq support ([b1ac909](https://github.com/soerenschneider/fetcharr/commit/b1ac9098fac02506e8a7f8ac63dd7a97cce9e01d))
+
+
+### Bug Fixes
+
+* **deps:** Bump alpine from 3.18.5 to 3.19.1 ([40e126e](https://github.com/soerenschneider/fetcharr/commit/40e126ee7f3dfcda47f93756919aea74618c10af))
+* **deps:** bump github.com/go-playground/validator/v10 ([53d2777](https://github.com/soerenschneider/fetcharr/commit/53d27773dd705c0b09b67c6a868d23fb0d65b29c))
+* **deps:** bump github.com/prometheus/client_golang ([64fd65d](https://github.com/soerenschneider/fetcharr/commit/64fd65ddfc0b590fef51f08e3deb519f727428be))
+* **deps:** Bump github.com/rs/zerolog from 1.31.0 to 1.32.0 ([8a4fd78](https://github.com/soerenschneider/fetcharr/commit/8a4fd78e31f2dc9653fbb2d9a3b15db88bacae1d))
+* **deps:** Bump github.com/segmentio/kafka-go from 0.4.46 to 0.4.47 ([45a6c4e](https://github.com/soerenschneider/fetcharr/commit/45a6c4edf543ff50a7c9f6f837424c73ea062b79))
+* **deps:** Bump golang from 1.21.4 to 1.22.0 ([0da1a65](https://github.com/soerenschneider/fetcharr/commit/0da1a65c1ec063194478cf6f03646b6544efe766))
+* **deps:** bump golang from 1.22.0 to 1.22.2 ([0f57b1d](https://github.com/soerenschneider/fetcharr/commit/0f57b1d25eeb7ec994c102f176ad88e63a3935f1))
+* **deps:** Bump golang.org/x/crypto from 0.14.0 to 0.17.0 ([10164e9](https://github.com/soerenschneider/fetcharr/commit/10164e97b955fcc7c9722d7c736c06cc93734801))
+* **deps:** bump golang.org/x/net from 0.17.0 to 0.23.0 ([3485019](https://github.com/soerenschneider/fetcharr/commit/34850192dcc55b198c195a4a526dd911627cca97))
+* **deps:** bump google.golang.org/protobuf from 1.31.0 to 1.33.0 ([4abffd3](https://github.com/soerenschneider/fetcharr/commit/4abffd3e20e4a57f7822356955145b6e07afde58))
+
 ## 1.0.0 (2023-12-04)
 
 
