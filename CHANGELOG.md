@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/soerenschneider/fetcharr/compare/v1.0.0...v1.1.0) (2024-04-30)
+
+
+### Features
+
+* add rabbitmq support ([b1ac909](https://github.com/soerenschneider/fetcharr/commit/b1ac9098fac02506e8a7f8ac63dd7a97cce9e01d))
+
+
+### Bug Fixes
+
+* **deps:** Bump alpine from 3.18.5 to 3.19.1 ([40e126e](https://github.com/soerenschneider/fetcharr/commit/40e126ee7f3dfcda47f93756919aea74618c10af))
+* **deps:** Bump golang from 1.21.4 to 1.22.0 ([0da1a65](https://github.com/soerenschneider/fetcharr/commit/0da1a65c1ec063194478cf6f03646b6544efe766))
+
 ## 1.0.0 (2023-12-04)
 
 
