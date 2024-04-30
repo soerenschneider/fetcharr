@@ -19,4 +19,16 @@ var (
 		Subsystem: eventsSubsystem,
 		Name:      "received_total",
 	}, []string{"source"})
+
+	RabbitMqErrors = promauto.NewCounterVec(prometheus.CounterOpts{
+		Namespace: namespace,
+		Subsystem: eventsSubsystem,
+		Name:      "rabbitmq_errors_total",
+	}, []string{"error"})
+
+	RabbitMqDisconnects = promauto.NewCounterVec(prometheus.CounterOpts{
+		Namespace: namespace,
+		Subsystem: eventsSubsystem,
+		Name:      "rabbitmq_disconnects_total",
+	}, []string{"type"})
 )

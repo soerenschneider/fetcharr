@@ -26,7 +26,7 @@ type Config struct {
 
 	Hooks []HookConfigContainer `yaml:"hooks"`
 
-	EventSourceImpl []string `yaml:"events_impl" validate:"omitempty,dive,oneof=kafka webhook_server ticker"`
+	EventSourceImpl []string `yaml:"events_impl" validate:"omitempty,dive,oneof=kafka rabbitmq webhook_server ticker"`
 	Kafka           struct {
 		// Mandatory options
 		Brokers []string `yaml:"brokers" validate:"dive,required_if=EventSourceImpl kafka"`
@@ -38,6 +38,21 @@ type Config struct {
 		TlsCertFile string `yaml:"tls_cert_file" validate:"omitempty,file"`
 		TlsKeyFile  string `yaml:"tls_key_file" validate:"omitempty,file"`
 	} `yaml:"kafka"`
+
+	RabbitMq struct {
+		// Mandatory options
+		Broker       string `yaml:"broker" validate:"required_if=EventSourceImpl rabbitmq"`
+		Port         int    `yaml:"port" validate:"omitempty,gte=80,lt=65535"`
+		QueueName    string `yaml:"queue" validate:"required_if=EventSourceImpl rabbitmq"`
+		ConsumerName string `yaml:"consumer"`
+		Vhost        string `yaml:"vhost" validate:"required_if=EventSourceImpl rabbitmq"`
+		Username     string `yaml:"username" validate:"required_if=EventSourceImpl rabbitmq"`
+		Password     string `yaml:"password" validate:"required_if=EventSourceImpl rabbitmq"`
+
+		// Advanced options
+		TlsCertFile string `yaml:"tls_cert_file" validate:"omitempty,file"`
+		TlsKeyFile  string `yaml:"tls_key_file" validate:"omitempty,file"`
+	} `yaml:"rabbitmq"`
 
 	Webhook struct {
 		// Mandatory options

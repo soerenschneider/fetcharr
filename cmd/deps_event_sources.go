@@ -7,6 +7,7 @@ import (
 	"github.com/soerenschneider/fetcharr/internal/config"
 	"github.com/soerenschneider/fetcharr/internal/events"
 	"github.com/soerenschneider/fetcharr/internal/events/kafka"
+	"github.com/soerenschneider/fetcharr/internal/events/rabbitmq"
 	"github.com/soerenschneider/fetcharr/internal/events/ticker"
 	"github.com/soerenschneider/fetcharr/internal/events/webhook_server"
 	"go.uber.org/multierr"
@@ -27,6 +28,8 @@ func buildEventSources(conf *config.Config) ([]events.EventSource, error) {
 			impl, err = buildWebhook(conf)
 		case "ticker":
 			impl, err = buildTicker(conf)
+		case "rabbitmq":
+			impl, err = buildRabbitMq(conf)
 		default:
 			log.Warn().Msgf("Unknown event source impl: %s. This should not happen", eventSourceImpl)
 		}
@@ -53,6 +56,28 @@ func buildKafka(conf *config.Config) (*kafka.KafkaReader, error) {
 	}
 
 	return kafka.NewReader(conf.Kafka.Brokers, conf.Kafka.Topic, conf.Kafka.GroupId, opts...)
+}
+
+func buildRabbitMq(conf *config.Config) (*rabbitmq.RabbitMqEventListener, error) {
+	var opts []rabbitmq.RabbitMqOpts
+
+	// add webhook_server path
+	if len(conf.RabbitMq.ConsumerName) > 0 {
+		opts = append(opts, rabbitmq.WithConsumerName(conf.RabbitMq.ConsumerName))
+	}
+
+	conn := rabbitmq.RabbitMqConnection{
+		BrokerHost: conf.RabbitMq.Broker,
+		Port:       conf.RabbitMq.Port,
+		Username:   conf.RabbitMq.Username,
+		Password:   conf.RabbitMq.Password,
+		Vhost:      conf.RabbitMq.Vhost,
+		CertFile:   conf.RabbitMq.TlsCertFile,
+		KeyFile:    conf.RabbitMq.TlsKeyFile,
+		UseSsl:     false,
+	}
+
+	return rabbitmq.New(conn, conf.RabbitMq.QueueName, opts...)
 }
 
 func buildWebhook(conf *config.Config) (*webhook_server.WebhookServer, error) {

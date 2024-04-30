@@ -7,7 +7,7 @@
 ## Features
 
 🪆 A powerful wrapper around rsync (or any other command) to fetch data from remote systems<br/>
-🔌 Multiple pluggable event notifiers that invoke sync process (Kafka, webhooks, time-based)<br/>
+🔌 Multiple pluggable event notifiers that invoke sync process (Kafka, RabbitMQ, webhooks, time-based)<br/>
 🪝 Support for defining multiple pre- and post-hooks<br/>
 🔭 Observability through Prometheus metrics<br/>
 
