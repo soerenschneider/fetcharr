@@ -25,7 +25,9 @@ func (c *CmdHook) Run(ctx context.Context, _ *syncer.Stats) error {
 	var errs error
 	for index, hook := range c.conf.Cmds {
 		if !*c.conf.StopOnError || errs == nil {
-			log.Info().Msgf("Running hook #%d: %q", index, hook)
+			if len(c.conf.Cmds) > 1 {
+				log.Info().Msgf("Running cmd #%d: %s", index, hook)
+			}
 
 			split := strings.Split(hook, " ")
 			var args []string
@@ -57,4 +59,8 @@ func (w *CmdHook) GetName() string {
 
 func (w *CmdHook) GetStage() config.Stage {
 	return w.conf.GetStage()
+}
+
+func (c *CmdHook) ExitOnErr() bool {
+	return c.conf.ExitOnErr()
 }

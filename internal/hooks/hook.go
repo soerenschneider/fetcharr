@@ -35,10 +35,13 @@ func (h *HookExectuor) Run(ctx context.Context, stage config.Stage, stats *synce
 		if hook.GetStage() == stage {
 			metrics.HookRuns.WithLabelValues(string(stage), hook.GetName()).Inc()
 
-			log.Info().Msgf("Running hook %q", hook.GetName())
+			log.Info().Str("hook", hook.GetName()).Msg("Running hook")
 			if err := hook.Run(ctx, stats); err != nil {
 				metrics.HookError.WithLabelValues(string(stage), hook.GetName()).Inc()
 				errs = multierr.Append(errs, err)
+				if hook.ExitOnErr() && stage == config.PRE {
+					log.Fatal().Err(err).Str("hook", hook.GetName()).Msg("exiting due to failed pre-hook marked as 'exit on error'")
+				}
 			}
 		}
 	}

@@ -15,6 +15,7 @@ type HookConfig interface {
 	GetType() string
 	GetName() string
 	GetStage() Stage
+	ExitOnErr() bool
 }
 
 type WebhookConfig struct {
@@ -24,6 +25,11 @@ type WebhookConfig struct {
 	Verb            string         `yaml:"verb" validate:"omitempty,oneof=GET get POST post PATCH patch HEAD head"`
 	Data            map[string]any `yaml:"data,omitempty" validate:"excluded_with=EncodedData"`
 	EncodedDataFile string         `yaml:"encoded_data_file,omitempty" validate:"excluded_with=Data,filepath"`
+	ExitOnError     bool           `yaml:"exit_on_error,omitempty"`
+}
+
+func (w *WebhookConfig) ExitOnErr() bool {
+	return w.ExitOnError
 }
 
 func (w *WebhookConfig) GetName() string {
@@ -43,6 +49,7 @@ type CmdHookConfig struct {
 	Stage       Stage    `yaml:"stage" validate:"required,oneof=PRE POST_SUCCESS POST_SUCCESS_TRANSFER POST_FAILURE"`
 	Cmds        []string `yaml:"commands" validate:"required"`
 	StopOnError *bool    `yaml:"stop_on_error"`
+	ExitOnError bool     `yaml:"exit_on_error,omitempty"`
 }
 
 func (w *CmdHookConfig) GetStage() Stage {
@@ -55,6 +62,10 @@ func (w *CmdHookConfig) GetName() string {
 
 func (w *CmdHookConfig) GetType() string {
 	return CmdHookType
+}
+
+func (w *CmdHookConfig) ExitOnErr() bool {
+	return w.ExitOnError
 }
 
 type HookConfigContainer struct {

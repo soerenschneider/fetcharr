@@ -101,3 +101,7 @@ func (w *WebhookClient) GetName() string {
 func (w *WebhookClient) GetStage() config.Stage {
 	return w.conf.GetStage()
 }
+
+func (w *WebhookClient) ExitOnErr() bool {
+	return w.conf.ExitOnErr()
+}
