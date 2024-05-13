@@ -6,7 +6,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/hashicorp/go-retryablehttp v0.7.5
-	github.com/prometheus/client_golang v1.19.0
+	github.com/prometheus/client_golang v1.19.1
 	github.com/rabbitmq/amqp091-go v1.9.0
 	github.com/rs/zerolog v1.32.0
 	github.com/segmentio/kafka-go v0.4.47
