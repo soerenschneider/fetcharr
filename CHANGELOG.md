@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.0](https://github.com/soerenschneider/fetcharr/compare/v1.1.0...v1.2.0) (2024-07-08)
+
+
+### Features
+
+* add option to exit on pre-hook error ([0aa2454](https://github.com/soerenschneider/fetcharr/commit/0aa24542eb3a73d8af5c1d8059075495131e7f81))
+
+
+### Bug Fixes
+
+* **deps:** bump alpine from 3.19.1 to 3.20.0 ([2b1cccc](https://github.com/soerenschneider/fetcharr/commit/2b1cccc65115138511f4338144754911a41355c5))
+* **deps:** bump golang from 1.22.2 to 1.22.3 ([522303b](https://github.com/soerenschneider/fetcharr/commit/522303becbde097a564e525a7a42c59aff4bd718))
+* **deps:** bump golang from 1.22.3 to 1.22.4 ([fd6a662](https://github.com/soerenschneider/fetcharr/commit/fd6a6628cab33c3dd49fa0708482a419015f3fef))
+
 ## [1.1.0](https://github.com/soerenschneider/fetcharr/compare/v1.0.0...v1.1.0) (2024-04-30)
 
 
