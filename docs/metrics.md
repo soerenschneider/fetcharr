@@ -22,7 +22,9 @@ All metrics are namespaced with `fetcharr`.
 | runner_sync_errors_total       | Runner errors total count (by implementation) | GaugeVec   | impl   |
 
 ## Subsystem Events
-| Metric Name                          | Description                               | Type       | Labels  |
-|--------------------------------------|-------------------------------------------|------------|---------|
-| events_received_timestamp_seconds    | Event received timestamp in seconds       | GaugeVec   | source  |
-| events_received_total                | Total events received count (by source)   | GaugeVec   | source  |
+| Metric Name                       | Description                                                    | Type       | Labels |
+|-----------------------------------|----------------------------------------------------------------|------------|--------|
+| events_received_timestamp_seconds | Event received timestamp in seconds                            | GaugeVec   | source |
+| events_received_total             | Total events received count (by source)                        | GaugeVec   | source |
+| rabbitmq_errors_total             | Total amount of errors while waiting for RabbitMQ events       | CounterVec | error  |
+| rabbitmq_disconnects_total        | Total amount of RabbitMQ disconnects by channel and connection | CounterVec | type   |

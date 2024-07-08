@@ -1,15 +1,13 @@
 events_impl:
-  - webhook_server
-  - ticker
+  - rabbitmq
 
 hooks:
-  - type: webhook
-    encoded_data: '{"subject":"Fetcharr success","message":"Transferred {{ .NumTransferredFiles }} files ({{ .TotalBytesReceivedHumanized }})","service_id":"telegram"}'
-    endpoint: https://hermes.domain.tld/notify
-    name: notify
-    stage: POST_SUCCESS_TRANSFER
-    verb: POST
-
+  - type: cmd
+    commands:
+      - test -d /tmp
+    name: test-directory
+    stage: PRE
+    exit_on_error: true
   - type: cmd
     commands:
       - echo "running before sync"
@@ -22,8 +20,8 @@ rsync:
   bwlimit: 12m
   exclude: '*.part'
   host: remote.host.tld
-  local_dir: /srv/files/linux-isos
-  remote_dir: /var/lib/transmission/completed
+  local_dir: /srv/files/linux-isos/
+  remote_dir: /var/lib/transmission/completed/
   remove_source_files: true
 
 syncer_impl: rsync
@@ -34,3 +32,12 @@ ticker:
 webhook_server:
   address: :9999
   path: /webhook
+
+rabbitmq:
+  broker: localhost
+  port: 5672
+  queue: fetcharr
+  vhost: prod
+  username: fetcharr
+  password: blasdasdgsadgasdasdgasdfa
+

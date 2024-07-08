@@ -1,0 +1,22 @@
+direction: right
+
+box: "" {
+  lan: "LAN" {
+    fileserver: {
+      fetcharr
+    }
+  }
+
+  remote: "Remote" {
+    lootbox: {
+      transmission
+    }
+  }
+}
+
+box.remote.lootbox.transmission -> box.lan.fileserver.fetcharr: invoke webhook {
+  style: {
+    stroke-dash: 3
+  }
+}
+box.lan.fileserver.fetcharr -> box.remote.lootbox: fetch data
