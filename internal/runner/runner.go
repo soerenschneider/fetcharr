@@ -66,21 +66,22 @@ func (r *Runner) Start(ctx context.Context, wg *sync.WaitGroup) error {
 
 	r.once.Do(func() {
 		wg.Add(1)
-		go func() {
-			ticker := time.NewTicker(5 * time.Second)
-			r.work(ctx)
-			for {
-				select {
-				case <-ticker.C:
-					r.work(ctx)
-				case <-ctx.Done():
-					log.Info().Msg("Stopping runner...")
-					ticker.Stop()
-					wg.Done()
-					return
-				}
+		ticker := time.NewTicker(5 * time.Second)
+		r.work(ctx)
+		stopLoop := false
+		for !stopLoop {
+			select {
+			case <-ticker.C:
+				r.work(ctx)
+			case <-ctx.Done():
+				log.Info().Msg("Stopping runner...")
+				ticker.Stop()
+				stopLoop = true
 			}
-		}()
+		}
+
+		wg.Done()
+		log.Debug().Msg("runner stopped")
 	})
 
 	return nil

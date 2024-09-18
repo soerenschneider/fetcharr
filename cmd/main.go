@@ -105,10 +105,12 @@ func run(deps *Deps) {
 		}(eventSource)
 	}
 
-	err := deps.runner.Start(ctx, deps.wg)
-	if err != nil {
-		log.Fatal().Err(err).Msg("could not start runner")
-	}
+	go func() {
+		err := deps.runner.Start(ctx, deps.wg)
+		if err != nil {
+			log.Fatal().Err(err).Msg("could not start runner")
+		}
+	}()
 
 	app, err := internal.NewFetcharr(deps.eventsChan, deps.runner)
 	if err != nil {
