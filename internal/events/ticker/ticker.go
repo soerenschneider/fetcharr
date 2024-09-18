@@ -21,6 +21,7 @@ func NewTicker(interval time.Duration) (*Ticker, error) {
 
 func (t *Ticker) Listen(ctx context.Context, events chan bool, wg *sync.WaitGroup) error {
 	wg.Add(1)
+	defer wg.Done()
 	ticker := time.NewTicker(t.interval)
 
 	for {
@@ -29,7 +30,6 @@ func (t *Ticker) Listen(ctx context.Context, events chan bool, wg *sync.WaitGrou
 			events <- true
 		case <-ctx.Done():
 			ticker.Stop()
-			wg.Done()
 			return nil
 		}
 	}
