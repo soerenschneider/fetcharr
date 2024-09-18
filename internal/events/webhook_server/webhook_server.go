@@ -51,6 +51,7 @@ func (w *WebhookServer) IsTLSConfigured() bool {
 
 func (w *WebhookServer) Listen(ctx context.Context, events chan bool, wg *sync.WaitGroup) error {
 	wg.Add(1)
+	defer wg.Done()
 	mux := http.NewServeMux()
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -90,7 +91,6 @@ func (w *WebhookServer) Listen(ctx context.Context, events chan bool, wg *sync.W
 	case <-ctx.Done():
 		log.Info().Msg("Stopping webhook_server server")
 		err := server.Shutdown(ctx)
-		wg.Done()
 		return err
 	case err := <-errChan:
 		return err
