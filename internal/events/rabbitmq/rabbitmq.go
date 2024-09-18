@@ -71,16 +71,22 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, events chan bool, wg
 
 	impl := backoff.NewExponentialBackOff()
 	operation := func() error {
-		err := e.listen(ctx, events)
-		if err != nil {
-			log.Error().Str("component", "rabbitmq").Err(err).Msg("error while listening on rabbitmq events")
-			amqpErr := &amqp.Error{}
-			if errors.As(err, amqpErr) {
-				metrics.RabbitMqErrors.WithLabelValues(strconv.Itoa(amqpErr.Code)).Inc()
+		select {
+		case <- ctx.Done():
+			return nil
+		default:
+			err := e.listen(ctx, events)
+			if err != nil {
+				log.Error().Str("component", "rabbitmq").Err(err).Msg("error while listening on rabbitmq events")
+				amqpErr := &amqp.Error{}
+				if errors.As(err, amqpErr) {
+					metrics.RabbitMqErrors.WithLabelValues(strconv.Itoa(amqpErr.Code)).Inc()
+				}
 			}
+			return err
 		}
-		return err
 	}
+	
 	notify := func(err error, d time.Duration) {
 		log.Error().Err(err).Str("component", "rabbitmq").Msgf("Error after %v", d)
 	}
