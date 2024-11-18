@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/cenkalti/backoff/v4 v4.3.0
-	github.com/go-playground/validator/v10 v10.22.1
+	github.com/go-playground/validator/v10 v10.23.0
 	github.com/hashicorp/go-retryablehttp v0.7.7
 	github.com/prometheus/client_golang v1.20.3
 	github.com/rabbitmq/amqp091-go v1.10.0
