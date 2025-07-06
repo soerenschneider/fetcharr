@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.0](https://github.com/soerenschneider/fetcharr/compare/v1.1.0...v1.2.0) (2024-09-18)
+
+
+### Features
+
+* add option to exit on pre-hook error ([0aa2454](https://github.com/soerenschneider/fetcharr/commit/0aa24542eb3a73d8af5c1d8059075495131e7f81))
+
+
+### Bug Fixes
+
+* **deps:** bump alpine from 3.19.1 to 3.20.0 ([2b1cccc](https://github.com/soerenschneider/fetcharr/commit/2b1cccc65115138511f4338144754911a41355c5))
+* **deps:** bump alpine from 3.20.0 to 3.20.3 ([9b93439](https://github.com/soerenschneider/fetcharr/commit/9b93439868227652d83e1510e73e4633d81c6fa6))
+* **deps:** bump github.com/go-playground/validator/v10 ([fc06169](https://github.com/soerenschneider/fetcharr/commit/fc061697a54d7518e7b181e7623788451a60ff80))
+* **deps:** bump github.com/hashicorp/go-retryablehttp ([cca13ca](https://github.com/soerenschneider/fetcharr/commit/cca13ca18d6b74a0f8d5ad830d0238192921fa0b))
+* **deps:** bump github.com/prometheus/client_golang ([a6cca38](https://github.com/soerenschneider/fetcharr/commit/a6cca387175d93652728811d7592793bba7cba66))
+* **deps:** bump github.com/rabbitmq/amqp091-go from 1.9.0 to 1.10.0 ([7c31753](https://github.com/soerenschneider/fetcharr/commit/7c31753935a97e0a3fc4554516d88ea5fe142df5))
+* **deps:** bump github.com/rs/zerolog from 1.32.0 to 1.33.0 ([f7cd0c0](https://github.com/soerenschneider/fetcharr/commit/f7cd0c0431af57bf9175de9a8cbbad026469e765))
+* **deps:** bump golang from 1.22.2 to 1.22.3 ([522303b](https://github.com/soerenschneider/fetcharr/commit/522303becbde097a564e525a7a42c59aff4bd718))
+* **deps:** bump golang from 1.22.3 to 1.22.4 ([fd6a662](https://github.com/soerenschneider/fetcharr/commit/fd6a6628cab33c3dd49fa0708482a419015f3fef))
+* **deps:** bump golang from 1.22.4 to 1.23.1 ([9c67430](https://github.com/soerenschneider/fetcharr/commit/9c6743007dca241a8b6de7fa6d39ad2ed8dde63e))
+
 ## [1.1.0](https://github.com/soerenschneider/fetcharr/compare/v1.0.0...v1.1.0) (2024-04-30)
 
 
