@@ -11,6 +11,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
+	"github.com/soerenschneider/fetcharr/internal/events"
 	"github.com/soerenschneider/fetcharr/internal/metrics"
 	"go.uber.org/multierr"
 )
@@ -65,17 +66,17 @@ func (e *RabbitMqEventListener) buildConnectionString() string {
 	return fmt.Sprintf("%s://%s:%s@%s:%d/%s", protocol, e.connection.Username, e.connection.Password, e.connection.BrokerHost, e.connection.Port, e.connection.Vhost)
 }
 
-func (e *RabbitMqEventListener) Listen(ctx context.Context, events chan bool, wg *sync.WaitGroup) error {
+func (e *RabbitMqEventListener) Listen(ctx context.Context, eventChan chan events.EventSyncRequest, wg *sync.WaitGroup) error {
 	wg.Add(1)
 	defer wg.Done()
 
 	impl := backoff.NewExponentialBackOff()
 	operation := func() error {
 		select {
-		case <- ctx.Done():
+		case <-ctx.Done():
 			return nil
 		default:
-			err := e.listen(ctx, events)
+			err := e.listen(ctx, eventChan)
 			if err != nil {
 				log.Error().Str("component", "rabbitmq").Err(err).Msg("error while listening on rabbitmq events")
 				amqpErr := &amqp.Error{}
@@ -86,7 +87,7 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, events chan bool, wg
 			return err
 		}
 	}
-	
+
 	notify := func(err error, d time.Duration) {
 		log.Error().Err(err).Str("component", "rabbitmq").Msgf("Error after %v", d)
 	}
@@ -107,7 +108,7 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, events chan bool, wg
 	return nil
 }
 
-func (e *RabbitMqEventListener) listen(ctx context.Context, events chan bool) error {
+func (e *RabbitMqEventListener) listen(ctx context.Context, eventChan chan events.EventSyncRequest) error {
 	conn, err := amqp.Dial(e.buildConnectionString())
 	if err != nil {
 		return err
@@ -148,7 +149,22 @@ func (e *RabbitMqEventListener) listen(ctx context.Context, events chan bool) er
 			return err
 		case <-msgs:
 			log.Debug().Str("component", "rabbitmq").Msg("received message")
-			events <- true
+			req := events.EventSyncRequest{
+				Source:   "rabbitmq",
+				Metadata: "", // TODO
+				Response: make(chan error),
+			}
+
+			eventChan <- req
+
+			select {
+			case err := <-req.Response:
+				if err != nil {
+					log.Error().Str("component", "rabbitmq").Err(err).Msg("received error response from fetcharr")
+				}
+			case <-time.After(3 * time.Second):
+				log.Warn().Str("component", "rabbitmq").Msgf("timeout waiting for goroutine")
+			}
 		case <-ctx.Done():
 			log.Debug().Str("component", "rabbitmq").Msg("context done")
 			return nil

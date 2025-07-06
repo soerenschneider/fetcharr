@@ -20,6 +20,12 @@ var (
 		Name:      "received_total",
 	}, []string{"source"})
 
+	EventsIgnored = promauto.NewGaugeVec(prometheus.GaugeOpts{
+		Namespace: namespace,
+		Subsystem: eventsSubsystem,
+		Name:      "ignored_total",
+	}, []string{"source"})
+
 	RabbitMqErrors = promauto.NewCounterVec(prometheus.CounterOpts{
 		Namespace: namespace,
 		Subsystem: eventsSubsystem,

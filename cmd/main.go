@@ -10,14 +10,12 @@ import (
 	"syscall"
 
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"github.com/soerenschneider/fetcharr/internal"
 	"github.com/soerenschneider/fetcharr/internal/config"
 	"github.com/soerenschneider/fetcharr/internal/events"
 	"github.com/soerenschneider/fetcharr/internal/metrics"
-	"github.com/soerenschneider/fetcharr/internal/runner"
 	"github.com/soerenschneider/fetcharr/internal/syncer"
-
-	"github.com/rs/zerolog/log"
 )
 
 var (
@@ -29,10 +27,10 @@ var (
 type Deps struct {
 	conf config.Config
 
-	eventsChan chan bool
+	eventsChan chan events.EventSyncRequest
 	wg         *sync.WaitGroup
 
-	runner *runner.Runner
+	app *internal.Fetcharr
 
 	// movable parts
 	syncImpl     syncer.Syncer
@@ -46,7 +44,8 @@ const (
 func main() {
 	// parse flags
 	parseFlags()
-	if printVersion { // abusing bool as subcmd
+	if printVersion {
+		//nolint: forbidigo
 		fmt.Println(internal.BuildVersion)
 		os.Exit(0)
 	}
@@ -72,7 +71,7 @@ func main() {
 	// build deps
 	deps := &Deps{}
 	deps.conf = *conf
-	deps.eventsChan = make(chan bool, 1)
+	deps.eventsChan = make(chan events.EventSyncRequest, 12)
 	deps.wg = &sync.WaitGroup{}
 
 	deps.syncImpl, err = buildSyncer(conf)
@@ -80,7 +79,7 @@ func main() {
 		log.Fatal().Err(err).Msg("could not build syncer")
 	}
 
-	deps.runner, err = buildRunner(conf, deps.syncImpl)
+	deps.app, err = buildApp(conf, deps.syncImpl, deps.eventsChan)
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not build runner")
 	}
@@ -106,16 +105,11 @@ func run(deps *Deps) {
 	}
 
 	go func() {
-		err := deps.runner.Start(ctx, deps.wg)
+		err := deps.app.Start(ctx, deps.wg)
 		if err != nil {
 			log.Fatal().Err(err).Msg("could not start runner")
 		}
 	}()
-
-	app, err := internal.NewFetcharr(deps.eventsChan, deps.runner)
-	if err != nil {
-		log.Fatal().Err(err)
-	}
 
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
@@ -130,8 +124,7 @@ func run(deps *Deps) {
 		go metrics.StartServer(deps.conf.MetricsAddr)
 	}
 
-	err = app.Loop(ctx, deps.wg)
-	if err != nil {
+	if err := deps.app.Start(ctx, deps.wg); err != nil {
 		log.Error().Err(err).Msg("error running loop")
 	}
 

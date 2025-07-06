@@ -9,6 +9,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/segmentio/kafka-go"
+	"github.com/soerenschneider/fetcharr/internal/events"
 	"go.uber.org/multierr"
 )
 
@@ -54,12 +55,12 @@ func NewReader(brokers []string, topic string, groupId string, opts ...KafkaRead
 	return kafka, errs
 }
 
-func (k *KafkaReader) Listen(ctx context.Context, events chan bool, wg *sync.WaitGroup) error {
+func (k *KafkaReader) Listen(ctx context.Context, eventChan chan events.EventSyncRequest, wg *sync.WaitGroup) error {
 	if ctx == nil {
 		return errors.New("empty context supplied")
 	}
 
-	if events == nil {
+	if eventChan == nil {
 		return errors.New("closed channel supplied")
 	}
 
@@ -94,7 +95,22 @@ func (k *KafkaReader) Listen(ctx context.Context, events chan bool, wg *sync.Wai
 			if err != nil && !errors.Is(err, context.Canceled) {
 				log.Error().Err(err).Msg("Error while reading kafka message")
 			} else {
-				events <- true
+				req := events.EventSyncRequest{
+					Source:   "kafka",
+					Metadata: "", // TODO
+					Response: make(chan error),
+				}
+
+				eventChan <- req
+
+				select {
+				case err := <-req.Response:
+					if err != nil {
+						log.Error().Str("component", "kafka").Err(err).Msg("received error response from fetcharr")
+					}
+				case <-time.After(3 * time.Second):
+					log.Warn().Str("component", "kafka").Msgf("timeout waiting for goroutine")
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package runner
+package internal
 
 import (
 	"errors"
@@ -7,15 +7,15 @@ import (
 	"github.com/soerenschneider/fetcharr/internal/hooks"
 )
 
-func WithTimeout(timeout time.Duration) func(*Runner) error {
-	return func(r *Runner) error {
+func WithTimeout(timeout time.Duration) func(*Fetcharr) error {
+	return func(r *Fetcharr) error {
 		r.syncerTimeout = timeout
 		return nil
 	}
 }
 
-func WithHooks(h []hooks.Hook) RunnerOpts {
-	return func(r *Runner) error {
+func WithHooks(h []hooks.Hook) FetcharrOpts {
+	return func(r *Fetcharr) error {
 		if len(h) == 0 {
 			return errors.New("empty pre hooks supplied")
 		}

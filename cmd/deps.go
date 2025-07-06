@@ -4,8 +4,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/soerenschneider/fetcharr/internal"
 	"github.com/soerenschneider/fetcharr/internal/config"
-	"github.com/soerenschneider/fetcharr/internal/runner"
+	"github.com/soerenschneider/fetcharr/internal/events"
 	"github.com/soerenschneider/fetcharr/internal/syncer"
 	"github.com/soerenschneider/fetcharr/internal/syncer/rsync"
 )
@@ -18,18 +19,18 @@ func buildSyncer(conf *config.Config) (syncer.Syncer, error) {
 	return nil, errors.New("unknown syncer")
 }
 
-func buildRunner(conf *config.Config, syncImpl syncer.Syncer) (*runner.Runner, error) {
-	var opts []runner.RunnerOpts
-	opts = append(opts, runner.WithTimeout(6*time.Hour))
+func buildApp(conf *config.Config, syncImpl syncer.Syncer, events chan events.EventSyncRequest) (*internal.Fetcharr, error) {
+	var opts []internal.FetcharrOpts
+	opts = append(opts, internal.WithTimeout(6*time.Hour))
 	if len(conf.Hooks) > 0 {
 		hooks, err := buildHooks(conf.Hooks)
 		if err != nil {
 			return nil, err
 		}
-		opts = append(opts, runner.WithHooks(hooks))
+		opts = append(opts, internal.WithHooks(hooks))
 	}
 
-	return runner.New(syncImpl, opts...)
+	return internal.NewFetcharr(syncImpl, events, opts...)
 }
 
 func buildRsync(conf *config.Config) (*rsync.Rsync, error) {
