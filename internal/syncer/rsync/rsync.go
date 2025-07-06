@@ -147,7 +147,7 @@ func extractInt(valueStr string) int64 {
 }
 
 func extractFloat(valueStr string) float64 {
-	valueStr = strings.Replace(valueStr, ",", "", -1)
+	valueStr = strings.ReplaceAll(valueStr, ",", "")
 	value, err := strconv.ParseFloat(strings.Split(valueStr, " ")[0], 64)
 	if err != nil {
 		return 0.0
