@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.3.0](https://github.com/soerenschneider/fetcharr/compare/v1.2.0...v1.3.0) (2025-07-07)
+
+
+### Features
+
+* improve events subsystem ([b40fe43](https://github.com/soerenschneider/fetcharr/commit/b40fe43235d8e383949e289a35acdd9d0beb690f))
+
+
+### Bug Fixes
+
+* **deps:** bump github.com/go-playground/validator/v10 ([524ed5b](https://github.com/soerenschneider/fetcharr/commit/524ed5b0242c9dccf665d638e9d583481f113bb4))
+* **deps:** bump github.com/go-playground/validator/v10 from 10.22.1 to 10.27.0 ([52d7a0b](https://github.com/soerenschneider/fetcharr/commit/52d7a0b9daa7e196ff4491edff230dabbbf38d2f))
+* **deps:** bump github.com/hashicorp/go-retryablehttp ([ea375f3](https://github.com/soerenschneider/fetcharr/commit/ea375f3e44c062f826c0e8741dbc7ab42ef9b7dc))
+* **deps:** bump github.com/hashicorp/go-retryablehttp from 0.7.7 to 0.7.8 ([af97cb4](https://github.com/soerenschneider/fetcharr/commit/af97cb4ec7fe98cbb9c34c13b77f58ef05bd3bb9))
+* **deps:** bump github.com/prometheus/client_golang ([2bcbddd](https://github.com/soerenschneider/fetcharr/commit/2bcbddd7e49863aa802b9f075de347ba331544bb))
+* **deps:** bump github.com/prometheus/client_golang from 1.20.3 to 1.22.0 ([6078e75](https://github.com/soerenschneider/fetcharr/commit/6078e753febf2d94fe47265e39b5bf14235b8578))
+* **deps:** bump github.com/rs/zerolog from 1.33.0 to 1.34.0 ([5c0a465](https://github.com/soerenschneider/fetcharr/commit/5c0a465140b948777025704896434f88e306ace3))
+* **deps:** bump github.com/rs/zerolog from 1.33.0 to 1.34.0 ([eb7d177](https://github.com/soerenschneider/fetcharr/commit/eb7d1779f705ebb772f961f1e43c4dd834b306ea))
+* **deps:** bump github.com/segmentio/kafka-go from 0.4.47 to 0.4.48 ([364d385](https://github.com/soerenschneider/fetcharr/commit/364d3858cdbf62eac03deb2bbe9d25ccb5c50c45))
+* **deps:** bump github.com/segmentio/kafka-go from 0.4.47 to 0.4.48 ([75040e1](https://github.com/soerenschneider/fetcharr/commit/75040e14b100ecf816c09b0d6753fd4a66edbe95))
+* **deps:** bump golang.org/x/crypto from 0.24.0 to 0.35.0 ([885c2bf](https://github.com/soerenschneider/fetcharr/commit/885c2bfffb8fc858963f3bfe864fcb89fcb24230))
+* **deps:** bump golang.org/x/crypto from 0.24.0 to 0.35.0 ([e9cb434](https://github.com/soerenschneider/fetcharr/commit/e9cb43433f7673e5b266ed92e86cbeb5d513071c))
+* **deps:** bump golang.org/x/net from 0.26.0 to 0.38.0 ([aaf0d69](https://github.com/soerenschneider/fetcharr/commit/aaf0d693d8a91fa0b28b4688b35550eb456d57d0))
+* **deps:** bump golang.org/x/net from 0.26.0 to 0.38.0 ([7a388eb](https://github.com/soerenschneider/fetcharr/commit/7a388eb0f6ad32f69807d2b4365b92dd9b9198c6))
+* **deps:** Update module github.com/cenkalti/backoff/v4 to v5 ([5fb7f29](https://github.com/soerenschneider/fetcharr/commit/5fb7f29fc776c860bb999fae246ce3646ad78c78))
+* **deps:** Update module github.com/cenkalti/backoff/v4 to v5 ([200d546](https://github.com/soerenschneider/fetcharr/commit/200d546cf9b7cf9e8d8546c39d64f6bb304145f8))
+
 ## [1.2.0](https://github.com/soerenschneider/fetcharr/compare/v1.1.0...v1.2.0) (2024-09-18)
 
 
