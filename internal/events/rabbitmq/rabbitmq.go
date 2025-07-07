@@ -108,19 +108,24 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, eventChan chan event
 	return nil
 }
 
+// nolint: cyclop
 func (e *RabbitMqEventListener) listen(ctx context.Context, eventChan chan events.EventSyncRequest) error {
 	conn, err := amqp.Dial(e.buildConnectionString())
 	if err != nil {
 		return err
 	}
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 	conNotify := conn.NotifyClose(make(chan *amqp.Error, 1))
 
 	ch, err := conn.Channel()
 	if err != nil {
 		return err
 	}
-	defer ch.Close()
+	defer func() {
+		_ = ch.Close()
+	}()
 	chNotify := ch.NotifyClose(make(chan *amqp.Error, 1))
 
 	msgs, err := ch.Consume(
