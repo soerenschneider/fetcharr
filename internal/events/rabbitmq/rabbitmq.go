@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cenkalti/backoff/v4"
+	"github.com/cenkalti/backoff/v5"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 	"github.com/soerenschneider/fetcharr/internal/events"
@@ -70,11 +70,10 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, eventChan chan event
 	wg.Add(1)
 	defer wg.Done()
 
-	impl := backoff.NewExponentialBackOff()
-	operation := func() error {
+	operation := func() (any, error) {
 		select {
 		case <-ctx.Done():
-			return nil
+			return nil, nil
 		default:
 			err := e.listen(ctx, eventChan)
 			if err != nil {
@@ -84,12 +83,8 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, eventChan chan event
 					metrics.RabbitMqErrors.WithLabelValues(strconv.Itoa(amqpErr.Code)).Inc()
 				}
 			}
-			return err
+			return nil, err
 		}
-	}
-
-	notify := func(err error, d time.Duration) {
-		log.Error().Err(err).Str("component", "rabbitmq").Msgf("Error after %v", d)
 	}
 
 	cont := true
@@ -99,7 +94,8 @@ func (e *RabbitMqEventListener) Listen(ctx context.Context, eventChan chan event
 			log.Debug().Str("component", "rabbitmq").Msg("Packing up")
 			cont = false
 		default:
-			if err := backoff.RetryNotify(operation, impl, notify); err != nil {
+			_, err := backoff.Retry[any](ctx, operation, backoff.WithBackOff(backoff.NewExponentialBackOff()))
+			if err != nil {
 				return fmt.Errorf("too many errors trying to listen on rabbitmq: %w", err)
 			}
 		}
