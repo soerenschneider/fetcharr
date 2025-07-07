@@ -58,10 +58,6 @@ func NewFetcharr(syncer syncer.Syncer, events chan events.EventSyncRequest, opts
 }
 
 func (r *Fetcharr) Start(ctx context.Context, wg *sync.WaitGroup) error {
-	if ctx == nil {
-		return errors.New("empty context supplied")
-	}
-
 	if wg == nil {
 		return errors.New("empty waitgroup supplied")
 	}

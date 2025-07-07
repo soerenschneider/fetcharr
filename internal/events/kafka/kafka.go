@@ -56,10 +56,6 @@ func NewReader(brokers []string, topic string, groupId string, opts ...KafkaRead
 }
 
 func (k *KafkaReader) Listen(ctx context.Context, eventChan chan events.EventSyncRequest, wg *sync.WaitGroup) error {
-	if ctx == nil {
-		return errors.New("empty context supplied")
-	}
-
 	if eventChan == nil {
 		return errors.New("closed channel supplied")
 	}
