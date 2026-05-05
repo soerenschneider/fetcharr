@@ -14,6 +14,13 @@ func WithTimeout(timeout time.Duration) func(*Fetcharr) error {
 	}
 }
 
+func WithCooldownTimer(cooldown time.Duration) func(*Fetcharr) error {
+	return func(r *Fetcharr) error {
+		r.cooldownTimer = cooldown
+		return nil
+	}
+}
+
 func WithHooks(h []hooks.Hook) FetcharrOpts {
 	return func(r *Fetcharr) error {
 		if len(h) == 0 {

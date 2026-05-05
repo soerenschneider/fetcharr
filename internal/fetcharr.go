@@ -86,6 +86,7 @@ func (r *Fetcharr) Start(ctx context.Context, wg *sync.WaitGroup) error {
 					}()
 				} else {
 					metrics.EventsIgnored.WithLabelValues(event.Source).Inc()
+					log.Info().Str("event_source", event.Source).Msg("Discarded event due to cooldown timer")
 
 					select {
 					case event.Response <- errors.New("cooldown phase"):
@@ -109,7 +110,7 @@ func (r *Fetcharr) work(ctx context.Context) {
 
 	log.Info().Msg("Checking if a new run is needed")
 	if r.wantsSync.Load() {
-		log.Info().Msg("Syncing and entering cooldown phase")
+		log.Info().Int64("cooldown-dur", int64(r.cooldownTimer.Seconds())).Msg("Syncing and entering cooldown phase")
 
 		cooldownCtx, cancel := context.WithTimeout(ctx, r.cooldownTimer)
 		go func() {

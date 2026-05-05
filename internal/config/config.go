@@ -2,12 +2,17 @@ package config
 
 import (
 	"os"
+	"sync"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"gopkg.in/yaml.v3"
 )
 
-var validate = validator.New(validator.WithRequiredStructEnabled())
+var (
+	validate *validator.Validate
+	once     sync.Once
+)
 
 type Config struct {
 	SyncerImpl string `yaml:"syncer_impl" validate:"required,oneof=rsync"`
@@ -23,6 +28,9 @@ type Config struct {
 		RemoveSourceFiles bool   `yaml:"remove_source_files"`
 		RemoteShell       string `yaml:"remote_shell"`
 	} `yaml:"rsync"`
+
+	Timeout       time.Duration `yaml:"timeout" validate:"duration"`
+	CooldownTimer time.Duration `yaml:"cooldown_timer" validate:"duration"`
 
 	Hooks []HookConfigContainer `yaml:"hooks"`
 
@@ -72,7 +80,33 @@ type Config struct {
 }
 
 func Validate(s any) error {
+	once.Do(func() {
+		validate = validator.New(validator.WithRequiredStructEnabled())
+		validate.RegisterValidation("duration", durationValidator)
+	})
 	return validate.Struct(s)
+}
+
+func durationValidator(fl validator.FieldLevel) bool {
+	field := fl.Field().Interface()
+
+	switch v := field.(type) {
+	case string:
+		_, err := time.ParseDuration(v)
+		return err == nil
+
+	case time.Duration:
+		return true // already parsed → valid
+
+	case *time.Duration:
+		if v == nil {
+			return true // use "required" if needed
+		}
+		return true
+
+	default:
+		return false
+	}
 }
 
 func Read(file string) (*Config, error) {
