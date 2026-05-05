@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/soerenschneider/fetcharr/compare/v1.3.0...v1.4.0) (2026-05-05)
+
+
+### Features
+
+* make cooldown timer configurable ([a214bce](https://github.com/soerenschneider/fetcharr/commit/a214bce6e345482947f4c809b915b51dcc8c66f2))
+
 ## [1.3.0](https://github.com/soerenschneider/fetcharr/compare/v1.2.0...v1.3.0) (2025-07-07)
 
 
